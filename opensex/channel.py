@@ -1,13 +1,11 @@
 class Channel(object):
     # stole these variable names from jilles' hybservtoatheme.pl
+    id = 0
     name = None
     founder = None
     registered = 0
     lastused = 0
     flags = 0
-    lockedon = 0
-    lockedoff = 0
-    lockedlimit = 0
     access = None
     meta = None
     

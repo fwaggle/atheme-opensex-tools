@@ -21,13 +21,13 @@ for s in db:
 db.close()
 
 # Read in and parse second database
-db = open(sys.argv[2], 'r')
+#db = open(sys.argv[2], 'r')
+#
+#for s in db:
+#    s = s.strip()
+#    parse(s)
+#
+#db.close()
 
-for s in db:
-    s = s.strip()
-    parse(s)
-
-db.close()
-
-debug()
-
+#debug()
+output()

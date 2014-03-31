@@ -1,3 +1,5 @@
+lastid = 1
+
 class User(object):
     id = None
     name = None
@@ -17,9 +19,12 @@ class User(object):
     
     # create user from db record
     def __init__(self, record):
+        global lastid
         r = record.split(' ', 6)
         
-        self.id = r[0]
+        self.id = lastid
+        lastid = int(lastid + 1)
+        
         self.name = r[1]
         self.password = r[2]
         self.email = r[3]
@@ -38,5 +43,5 @@ class Nick(object):
         r = record.split(' ')
         
         self.name = r[0]
-        self.created = r[1]
-        self.seen = r[2]
+        self.created = int(r[1])
+        self.seen = int(r[2])

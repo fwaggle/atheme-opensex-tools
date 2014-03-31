@@ -82,12 +82,12 @@ def parse(s):
         for c in channels:
             if c.name == chan.name:
                 if c.registered <= chan.registered:
-                    print "%s (%d) is older than current, ignoring..." % (chan.name, chan.registered)
+#                    print "%s (%d) is older than current, ignoring..." % (chan.name, chan.registered)
                     chan = None
                     channels_ignore.append(c.name)
                     break
                 else:
-                    print "Replacing %s (%d) with %s (%d)" % (c.name, c.registered, chan.name, chan.registered)
+#                    print "Replacing %s (%d) with %s (%d)" % (c.name, c.registered, chan.name, chan.registered)
                     # This channel is newer, blow away the old one
                     channels.remove(c)
 
@@ -109,8 +109,49 @@ def parse(s):
         else:
             chan.access[access[1]] = access[2]
 
-    else:
-        print "Unhandled record type: %s" % record[0]
+#    else:
+#        print "Unhandled record type: %s" % record[0]
+
+def output():
+    global users, channels, mdep, cf, dbv, memos
+    
+    print "DBV %d" % int(dbv)
+    
+    for mod in mdep:
+        print "MDEP %s" % mod
+    
+    # print lastuid
+    
+    print "CF %s" % cf
+    
+    # user accounts
+    for i in users:
+        u = users[i]
+        
+        print "MU %s %s %s %s %d %d %s" % (u.id, u.name, u.password, u.email, u.created, u.seen, u.flags)
+        
+        # user metadata
+        
+        for m in u.meta:
+            print "MDU %s %s %s" % (u.name, m, u.meta[m])
+        
+        # user nicks
+        for j in u.nicks:
+            n = u.nicks[j]
+            
+            print "MN %s %s %d %d" % (u.name, n.name, n.created, n.seen)
+        
+    # channels
+    for c in channels:
+        print "MC %s %d %d %s  " % (c.name, c.registered, c.lastused, c.flags)
+        
+        # channel access
+        for a in c.access:
+            print "CA %s %s %s " % (c.name, a, c.access[a])
+        
+        # channel metadata
+        for m in c.meta:
+            print "MDC %s %s %s" % (c.name, m, c.meta[m])
 
 # Dump the user and channel objects in memory to stdout        
 def debug():
@@ -130,4 +171,4 @@ def debug():
         print "  Access list:"
         print "\t%s" % c.access
 
-    print mdep
+#    print mdep
