@@ -15,5 +15,8 @@ Merge two databases (throwing away newer records where older ones exist):
 
 ## Potential issues
 
+* We currently chuck away the IDs and just start counting and assigning
+  new ones. I have no idea about the repercussions of this.
+
 * Nickname record collisions - this needs refactoring into it's own list,
   instead of being a child of the User object.
