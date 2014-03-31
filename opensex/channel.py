@@ -12,15 +12,11 @@ class Channel(object):
     meta = None
     
     def __init__(self, record):
-        channel = record.split(' ', 9)
+        channel = record.split(' ', 3)
         
         self.name = channel[0]
-        self.founder = channel[2]
-        self.registered = int(channel[3])
-        self.lastused = int(channel[4])
-        self.flags = channel[5]
-        self.lockedon = channel[6]
-        self.lockedoff = channel[7]
-        self.lockedlimit = channel[8]
+        self.registered = int(channel[1])
+        self.lastused = int(channel[2])
+        self.flags = channel[3]
         self.access = {}
         self.meta = {}

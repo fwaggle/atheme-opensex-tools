@@ -1,4 +1,5 @@
 class User(object):
+    id = None
     name = None
     password = None
     email = None
@@ -16,14 +17,15 @@ class User(object):
     
     # create user from db record
     def __init__(self, record):
-        r = record.split(' ', 5)
+        r = record.split(' ', 6)
         
-        self.name = r[0]
-        self.password = r[1]
-        self.email = r[2]
-        self.created = int(r[3])
-        self.seen = int(r[4])
-        self.flags = r[5]
+        self.id = r[0]
+        self.name = r[1]
+        self.password = r[2]
+        self.email = r[3]
+        self.created = int(r[4])
+        self.seen = int(r[5])
+        self.flags = r[6]
         self.meta = {}
         self.nicks = {}
 
