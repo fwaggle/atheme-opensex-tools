@@ -7,6 +7,7 @@ memos = []
 channels = []
 dbv = None
 cf = None
+mdep = []
 
 channels_ignore = []
 
@@ -113,7 +114,7 @@ def parse(s):
 
 # Dump the user and channel objects in memory to stdout        
 def debug():
-    global users, channels
+    global users, channels, mdep
     for u in users:
         user = users[u]
         print "%s (%s) created %d" % (user.name, user.email, user.created)
@@ -128,3 +129,5 @@ def debug():
         print "\t%s" % c.meta
         print "  Access list:"
         print "\t%s" % c.access
+
+    print mdep
