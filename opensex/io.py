@@ -25,38 +25,38 @@ def parse(s):
     elif record[0] == 'CF':
         cf = record[1]
 
+    # MDEP: Module dependencies, we don't touch these
+    elif record[0] == 'MDEP':
+        mdep.append(record[1])
+
     # MD: User record
     elif record[0] == 'MU':
         u = User(record[1])
         users[u.name] = u
 
-    # MD: metadata?
-    elif record[0] == 'MD':
-        type = record[1].split(' ', 1)
+    # MDU: User Metadata
+    elif record[0] == 'MDU':
+        meta = record[1].split(' ', 2)
+        if meta[0] in users:
+            u = users[meta[0]]
+            u.meta[meta[1]] = meta[2]
+        else:
+            print "Warning: Metadata found for nonexistent user: %s" % meta[0]
+
+    # MDC: Channel metadata
+    elif record[0] == 'MDC':
+        meta = record[1].split(' ', 2)
+        chan = None
         
-        # User metadata
-        if type[0] == 'U':
-            meta = type[1].split(' ', 2)
-            if meta[0] in users:
-                u = users[meta[0]]
-                u.meta[meta[1]] = meta[2]
-            else:
-                print "Warning: Metadata found for nonexistent user: %s" % meta[0]
+        for c in channels:
+            if c.name == meta[0]:
+                chan = c
+                break
         
-        # Channel metadata
-        if type[0] == 'C':
-            meta = type[1].split(' ', 2)
-            chan = None
-        
-            for c in channels:
-                if c.name == meta[0]:
-                    chan = c
-                    break
-        
-            if chan == None:
-                print "Warning: Channel metadata record for unknown channel %s" % meta[0]
-            else:
-                chan.meta[meta[1]] = meta[2]
+        if chan == None:
+            print "Warning: Channel metadata record for unknown channel %s" % meta[0]
+        else:
+            chan.meta[meta[1]] = meta[2]
 
     # MN: User nick registration
     elif record[0] == 'MN':
