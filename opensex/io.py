@@ -8,6 +8,8 @@ channels = []
 dbv = None
 cf = None
 
+channels_ignore = []
+
 # Parse OpenSEX database
 # Note that because this was written for merge.py, it will clobber
 # new records with old (by ts). This may not be what you want.
@@ -75,7 +77,21 @@ def parse(s):
     # MC: Channel record
     elif record[0] == 'MC':
         chan = Channel(record[1])
-        channels.append(chan)
+        
+        for c in channels:
+            if c.name == chan.name:
+                if c.registered <= chan.registered:
+                    print "%s (%d) is older than current, ignoring..." % (chan.name, chan.registered)
+                    chan = None
+                    channels_ignore.append(c.name)
+                    break
+                else:
+                    print "Replacing %s (%d) with %s (%d)" % (c.name, c.registered, chan.name, chan.registered)
+                    # This channel is newer, blow away the old one
+                    channels.remove(c)
+
+        if chan != None:
+            channels.append(chan)
     
     # CA: Channel access?
     elif record[0] == 'CA':
