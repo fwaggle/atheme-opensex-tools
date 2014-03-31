@@ -10,3 +10,6 @@ Merge two databases (throwing away newer records where older ones exist):
 ## Potential issues
 
 * I don't know if memos are to/from users or nicks. Pretending users atm.
+
+* Nickname record collisions - this needs refactoring into it's own list,
+  instead of being a child of the User object.
