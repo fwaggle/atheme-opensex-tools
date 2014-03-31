@@ -16,7 +16,7 @@ It's currently unfinished and untested.
 
 Merge two databases (throwing away newer records where older ones exist):
 
-    ./merge.py atheme.db old.db
+    ./merge.py atheme.db old.db > new.db
 
 ## Potential issues
 
