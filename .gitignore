@@ -1,5 +1,6 @@
 *.pyc
 atheme.db
 atheme.db.old
+services.db
 *~
 .#*
