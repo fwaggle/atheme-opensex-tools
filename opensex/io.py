@@ -2,6 +2,8 @@ from opensex.user import *
 from opensex.memo import *
 from opensex.channel import *
 
+import sys
+
 users = {}
 memos = []
 channels = []
@@ -43,7 +45,7 @@ def parse(s):
             u = users[meta[0]]
             u.meta[meta[1]] = meta[2]
         else:
-            print "Warning: Metadata found for nonexistent user: %s" % meta[0]
+            sys.stderr.write("Warning: Metadata found for nonexistent user: %s\n" % meta[0])
         
         lastuid = u.getlastid()
 
@@ -58,7 +60,7 @@ def parse(s):
                 break
         
         if chan == None:
-            print "Warning: Channel metadata record for unknown channel %s" % meta[0]
+            sys.stderr.write("Warning: Channel metadata record for unknown channel %s\n" % meta[0])
         else:
             chan.meta[meta[1]] = meta[2]
 
@@ -71,7 +73,7 @@ def parse(s):
             n = Nick(nick[1])
             u.nicks[n.name] = n
         else:
-            print "Warning: Nickname registration for nonexistent user: %s" % nick[0]
+            sys.stderr.write("Warning: Nickname registration for nonexistent user: %s\n" % nick[0])
 
     # ME: Memos?
     elif record[0] == 'ME':
@@ -85,12 +87,12 @@ def parse(s):
         for c in channels:
             if c.name == chan.name:
                 if c.registered <= chan.registered:
-#                    print "%s (%d) is older than current, ignoring..." % (chan.name, chan.registered)
+                    sys.stderr.write("%s (%d) is older than current, ignoring...\n" % (chan.name, chan.registered))
                     chan = None
                     channels_ignore.append(c.name)
                     break
                 else:
-#                    print "Replacing %s (%d) with %s (%d)" % (c.name, c.registered, chan.name, chan.registered)
+                    sys.stderr.write("Replacing %s (%d) with %s (%d)\n" % (c.name, c.registered, chan.name, chan.registered))
                     # This channel is newer, blow away the old one
                     channels.remove(c)
 
@@ -108,7 +110,7 @@ def parse(s):
                 break
         
         if chan == None:
-            print "Warning: Channel access record for unknown channel %s" % access[0]
+            sys.stderr.write("Warning: Channel access record for unknown channel %s\n" % access[0])
         else:
             chan.access[access[1]] = access[2]
 
