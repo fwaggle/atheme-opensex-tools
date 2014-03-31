@@ -1,5 +1,11 @@
-# Tools for OpenSEX databases (atheme et al)
+# Tools for OpenSEX databases
 (C) 2014 fwaggle <fwaggle@fwaggle.org>
+
+I made this to scratch an itch, but it's not yet complete. At present it
+will rather naively merge multiple databases and dump out a new DB. It
+throws away a lot of information, including the user IDs.
+
+It's currently unfinished and untested.
 
 # Usage:
 
@@ -8,8 +14,6 @@ Merge two databases (throwing away newer records where older ones exist):
     ./merge.py atheme.db old.db
 
 ## Potential issues
-
-* I don't know if memos are to/from users or nicks. Pretending users atm.
 
 * Nickname record collisions - this needs refactoring into it's own list,
   instead of being a child of the User object.
