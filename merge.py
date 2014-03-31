@@ -1,21 +1,37 @@
 #! /usr/local/bin/python
 
 from opensex.user import *
+from opensex.memo import *
+from opensex.channel import *
 import codecs, sys
 
 if (len(sys.argv) < 2):
-    print "Usage: %s <atheme.db>" % sys.argv[0]
+    print "Usage: %s <old.db> <new.db>" % sys.argv[0]
+    print "   Output is to STDOUT."
     exit()
 
 users = {}
+memos = []
+channels = []
+dbv = None
+cf = None
+
 db = open(sys.argv[1], 'r')
 
 for s in db:
     s = s.strip()
     record = s.split(' ', 1)
-    
+
+    # DBV: Database version - we don't do anything with this    
+    if record[0] == 'DBV':
+        dbv = record[1]
+
+    # CF: we don't do anything with this either
+    elif record[0] == 'CF':
+        cf = record[1]
+
     # MD: User record
-    if record[0] == 'MU':
+    elif record[0] == 'MU':
         u = User(record[1])
         users[u.name] = u
 
@@ -31,6 +47,21 @@ for s in db:
                 u.meta[meta[1]] = meta[2]
             else:
                 print "Warning: Metadata found for nonexistent user: %s" % meta[0]
+        
+        # Channel metadata
+        if type[0] == 'C':
+            meta = type[1].split(' ', 2)
+            chan = None
+        
+            for c in channels:
+                if c.name == meta[0]:
+                    chan = c
+                    break
+        
+            if chan == None:
+                print "Warning: Channel metadata record for unknown channel %s" % meta[0]
+            else:
+                chan.meta[meta[1]] = meta[2]
 
     # MN: User nick registration
     elif record[0] == 'MN':
@@ -43,9 +74,37 @@ for s in db:
         else:
             print "Warning: Nickname registration for nonexistent user: %s" % nick[0]
 
+    # ME: Memos?
+    elif record[0] == 'ME':
+        memo = Memo(record[1])
+        memos.append(memo)
+
+    # MC: Channel record
+    elif record[0] == 'MC':
+        chan = Channel(record[1])
+        channels.append(chan)
+    
+    # CA: Channel access?
+    elif record[0] == 'CA':
+        access = record[1].split(' ', 2)
+        chan = None
+        
+        for c in channels:
+            if c.name == access[0]:
+                chan = c
+                break
+        
+        if chan == None:
+            print "Warning: Channel access record for unknown channel %s" % access[0]
+        else:
+            chan.access[access[1]] = access[2]
+
+    else:
+        print "Unhandled record type: %s" % record[0]
+        
 db.close()
 
-#exit()
+exit()
 
 for u in users:
     user = users[u]
@@ -54,4 +113,10 @@ for u in users:
     for n in user.nicks:
         print(" %s" % n),
     print ""
-    print "\t %s" % user.meta
+    print "\t%s" % user.meta
+
+for c in channels:
+    print "%s registered %d by %s" % (c.name, c.registered, c.founder)
+    print "\t%s" % c.meta
+    print "  Access list:"
+    print "\t%s" % c.access
