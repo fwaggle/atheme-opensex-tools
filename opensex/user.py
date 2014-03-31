@@ -33,6 +33,10 @@ class User(object):
         self.flags = r[6]
         self.meta = {}
         self.nicks = {}
+    
+    def getlastid(self):
+        global lastid
+        return lastid
 
 class Nick(object):
     name = None

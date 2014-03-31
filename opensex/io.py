@@ -8,6 +8,7 @@ channels = []
 dbv = None
 cf = None
 mdep = []
+lastuid = 0
 
 channels_ignore = []
 
@@ -15,7 +16,7 @@ channels_ignore = []
 # Note that because this was written for merge.py, it will clobber
 # new records with old (by ts). This may not be what you want.
 def parse(s):
-    global dbv, cf, users, channels, memos
+    global dbv, cf, users, channels, memos, lastuid
     record = s.split(' ', 1)
 
     # DBV: Database version - we don't do anything with this    
@@ -43,6 +44,8 @@ def parse(s):
             u.meta[meta[1]] = meta[2]
         else:
             print "Warning: Metadata found for nonexistent user: %s" % meta[0]
+        
+        lastuid = u.getlastid()
 
     # MDC: Channel metadata
     elif record[0] == 'MDC':
@@ -113,14 +116,14 @@ def parse(s):
 #        print "Unhandled record type: %s" % record[0]
 
 def output():
-    global users, channels, mdep, cf, dbv, memos
+    global users, channels, mdep, cf, dbv, memos, lastuid
     
     print "DBV %d" % int(dbv)
     
     for mod in mdep:
         print "MDEP %s" % mod
     
-    # print lastuid
+    print "LUID %s" % encodeid(lastuid)
     
     print "CF %s" % cf
     
