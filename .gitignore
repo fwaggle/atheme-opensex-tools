@@ -1,4 +1,5 @@
 *.pyc
 atheme.db
+atheme.db.old
 *~
 .#*
