@@ -16,10 +16,8 @@ channels = []
 dbv = None
 cf = None
 
-db = open(sys.argv[1], 'r')
-
-for s in db:
-    s = s.strip()
+def parse(s):
+    global dbv, cf, users, channels, memos
     record = s.split(' ', 1)
 
     # DBV: Database version - we don't do anything with this    
@@ -102,21 +100,31 @@ for s in db:
     else:
         print "Unhandled record type: %s" % record[0]
         
+def debug():
+    global users, channels
+    for u in users:
+        user = users[u]
+        print "%s (%s) created %d" % (user.name, user.email, user.created)
+        print ("\tNicknames: "), # fuck python3
+        for n in user.nicks:
+            print(" %s" % n),
+        print ""
+        print "\t%s" % user.meta
+
+    for c in channels:
+        print "%s registered %d by %s" % (c.name, c.registered, c.founder)
+        print "\t%s" % c.meta
+        print "  Access list:"
+        print "\t%s" % c.access
+
+# Read in and parse first database
+db = open(sys.argv[1], 'r')
+
+for s in db:
+    s = s.strip()
+    parse(s)
+
 db.close()
 
-exit()
+debug()
 
-for u in users:
-    user = users[u]
-    print "%s (%s) created %d" % (user.name, user.email, user.created)
-    print ("\tNicknames: "), # fuck python3
-    for n in user.nicks:
-        print(" %s" % n),
-    print ""
-    print "\t%s" % user.meta
-
-for c in channels:
-    print "%s registered %d by %s" % (c.name, c.registered, c.founder)
-    print "\t%s" % c.meta
-    print "  Access list:"
-    print "\t%s" % c.access
