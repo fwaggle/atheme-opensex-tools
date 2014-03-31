@@ -1,6 +1,11 @@
 # Tools for OpenSEX databases
 (C) 2014 fwaggle <fwaggle@fwaggle.org>
 
+This is an assortment of tools to do things to Atheme services databases.
+
+Currently there is one tool: merging databases, while keeping only the
+oldest record in any of the DBs.
+
 I made this to scratch an itch, but it's not yet complete. At present it
 will rather naively merge multiple databases and dump out a new DB. It
 throws away a lot of information, including the user IDs.
