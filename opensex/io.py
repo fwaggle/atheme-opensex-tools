@@ -128,7 +128,7 @@ def output():
     for i in users:
         u = users[i]
         
-        print "MU %s %s %s %s %d %d %s" % (u.id, u.name, u.password, u.email, u.created, u.seen, u.flags)
+        print "MU %s %s %s %s %d %d %s" % (encodeid(u.id), u.name, u.password, u.email, u.created, u.seen, u.flags)
         
         # user metadata
         
@@ -172,3 +172,13 @@ def debug():
         print "\t%s" % c.access
 
 #    print mdep
+
+def encodeid(input):
+    # base 36 on crack or something?
+    digits = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890'
+    output = ''
+    while input:
+        input, remainder = divmod(input, 36)
+        output = digits[remainder] + output
+
+    return output.rjust(9,'A')

@@ -1,4 +1,4 @@
-lastid = 1
+lastid = 0
 
 class User(object):
     id = None
